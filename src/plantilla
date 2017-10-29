@@ -1,0 +1,9 @@
+'use strict'
+
+function plantilla (){
+  return Object.freeze({
+
+  })
+}
+
+module.exports = plantilla

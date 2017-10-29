@@ -1,0 +1,7 @@
+const {assert} = require('chai')
+const sinon = require('sinon')
+const plantilla = require('../src/plantilla')
+
+describe('plantilla', function(){
+
+})
