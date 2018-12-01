@@ -4,7 +4,7 @@
   "description": "Package to ease tests specify async requirements.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/*.spec.js --watch"
+    "test": "mocha test/*.spec.js"
   },
   "repository": {
     "type": "git",
