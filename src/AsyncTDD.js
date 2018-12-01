@@ -25,46 +25,72 @@ function AsyncTDD () {
     })
   }
 
-  async function asyncTest (fn) {
-    let asyncFunctionObjects = []
-    for (let i = 0; i < fn.length; i++) {
-      asyncFunctionObjects.push({
+  function getPromiseParameters (mainFunction) {
+    let promiseParameters = []
+    for (let i = 0; i < mainFunction.length; i++) {
+      promiseParameters.push({
         asyncFunction: AsyncFunction()
       })
     }
+    return promiseParameters
+  }
 
-    let asyncFunctionsExecution = []
-    asyncFunctionObjects.forEach(function (asyncFunctionObject) {
-      asyncFunctionsExecution.push(function () {
-        asyncFunctionObject.asyncFunction.resolve()
+  function getFunctionsToResolvePromiseParameters (promiseParameters) {
+    let functionsToResolvePromiseParameters = []
+    promiseParameters.forEach(function (parameter) {
+      functionsToResolvePromiseParameters.push(function () {
+        parameter.asyncFunction.resolve()
       })
     })
+    return functionsToResolvePromiseParameters
+  }
 
-    let functionExecution = async function () {
-      let asyncFunctions = []
-      asyncFunctionObjects.forEach(function (asyncFunctionObject) {
-        asyncFunctions.push(asyncFunctionObject.asyncFunction)
-      })
-
-      await fn.apply(null, asyncFunctions)
+  function getMainFunctionExecution (mainFunction, promiseParameters) {
+    return async function () {
+      let parameterPromises = getParameterPromises(promiseParameters)
+      await mainFunction.apply(null, parameterPromises)
     }
+  }
 
+  function getParameterPromises (promiseParameters) {
+    let parameterPromises = []
+    promiseParameters.forEach(function (parameter) {
+      parameterPromises.push(parameter.asyncFunction)
+    })
+    return parameterPromises
+  }
+
+  function getPermutations (mainFunction, promiseParameters) {
     let permutations = []
-    let permutationsGenerator = allCombinations([functionExecution, ...asyncFunctionsExecution])
+    let mainFunctionExecution = getMainFunctionExecution(mainFunction, promiseParameters)
+    let functionsToResolvePromiseParameters = getFunctionsToResolvePromiseParameters(promiseParameters)
+    let permutationsGenerator = allCombinations([mainFunctionExecution, ...functionsToResolvePromiseParameters])
     for (let permutation of permutationsGenerator) {
       permutations.push(permutation)
     }
+    return permutations
+  }
 
+  async function executePermutation (permutation) {
+    let executions = []
+    for (let fnToExecute of permutation) {
+      executions.push(fnToExecute())
+    }
+    await Promise.all(executions)
+  }
+
+  function resetParameterPromises (promiseParameters) {
+    promiseParameters.forEach(function (parameter) {
+      parameter.asyncFunction = AsyncFunction()
+    })
+  }
+
+  async function asyncTest (mainFunction) {
+    let promiseParameters = getPromiseParameters(mainFunction)
+    let permutations = getPermutations(mainFunction, promiseParameters)
     for (let permutation of permutations) {
-      let executions = []
-      for (let fnToExecute of permutation) {
-        executions.push(fnToExecute())
-      }
-      await Promise.all(executions)
-
-      asyncFunctionObjects.forEach(function (asyncFunctionObject) {
-        asyncFunctionObject.asyncFunction = AsyncFunction()
-      })
+      await executePermutation(permutation)
+      resetParameterPromises(promiseParameters)
     }
   }
 }
