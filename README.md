@@ -3,6 +3,3 @@
 # AsyncTDD
 Package to ease making tests for async requirements. There are some examples of use in test/AsyncTest.integration.spec.js
 
-
-
-ackage to ease tests specify async requirements. 
