@@ -93,7 +93,6 @@ describe('AsyncTDD', () => {
         })
 
         it('must resolve the parameter when the function is waiting for the parameter', async function () {
-          let execution = 0
           let builtParameter
           const asyncTest = asyncTDD.asyncTest
           const functionToExecute = async function (parameter) {
