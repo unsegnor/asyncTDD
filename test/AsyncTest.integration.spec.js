@@ -1,5 +1,4 @@
-const asyncTDD = require('../src/AsyncTDD')()
-const asyncTest = asyncTDD.asyncTest
+const {asyncTest} = require('../index')()
 
 describe('AsyncTest', function () {
   it('must pass when the main function is waiting for the data services', async () => {
