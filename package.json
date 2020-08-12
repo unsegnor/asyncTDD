@@ -4,7 +4,8 @@
   "description": "Package to ease making tests for async requirements. There are some examples of use in test/AsyncTest.integration.spec.js",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/*.spec.js"
+    "test": "mocha test/*.spec.js",
+    "patch": "npm version patch && git push --follow-tags"
   },
   "repository": {
     "type": "git",
