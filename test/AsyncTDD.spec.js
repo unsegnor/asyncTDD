@@ -15,23 +15,23 @@ describe('AsyncTDD', () => {
       describe('called property', () => {
         it('must be true when the function is called', () => {
           asyncFunction()
-          assert.isOk(asyncFunction.called)
+          assert.isTrue(asyncFunction.called)
         })
 
         it('must be false when the function is not called', () => {
-          assert.isNotOk(asyncFunction.called)
+          assert.isFalse(asyncFunction.called)
         })
       })
 
       describe('executed property', () => {
         it('must be true when the function ends its asynchronous execution', async () => {
           await asyncFunction()
-          assert.isOk(asyncFunction.executed)
+          assert.isTrue(asyncFunction.executed)
         })
 
         it('must be false when the function does not end its execution', () => {
           asyncFunction()
-          assert.isNotOk(asyncFunction.executed)
+          assert.isFalse(asyncFunction.executed)
         })
       })
     })
@@ -44,7 +44,7 @@ describe('AsyncTDD', () => {
         const functionToExecute = sinon.stub()
         await asyncTest(functionToExecute)
 
-        assert.isOk(functionToExecute.called)
+        assert.isTrue(functionToExecute.called)
       })
 
       it('must wait for the function to execute to finish', async function () {
@@ -52,7 +52,7 @@ describe('AsyncTDD', () => {
         const functionToExecute = asyncTDD.getAsyncFunction()
         await asyncTest(functionToExecute)
 
-        assert.isOk(functionToExecute.executed)
+        assert.isTrue(functionToExecute.executed)
       })
     })
 
@@ -60,7 +60,7 @@ describe('AsyncTDD', () => {
       it('must create an asyncFunction for the parameter', async function () {
         const asyncTest = asyncTDD.asyncTest
         const functionToExecute = function (parameter) {
-          assert.isOk(parameter.resolve)
+          assert.isDefined(parameter.resolve)
         }
         await asyncTest(functionToExecute)
       })
@@ -73,7 +73,7 @@ describe('AsyncTDD', () => {
         }
         await asyncTest(functionToExecute)
 
-        assert.isOk(functionToExecuteSpy.calledTwice)
+        assert.isTrue(functionToExecuteSpy.calledTwice)
       })
 
       describe('in the first execution', function () {
@@ -84,12 +84,12 @@ describe('AsyncTDD', () => {
           const functionToExecute = function (parameter) {
             execution++
             if (execution === 1) {
-              assert.isNotOk(parameter.resolved)
+              assert.isFalse(parameter.resolved)
             }
             builtParameter = parameter
           }
           await asyncTest(functionToExecute)
-          assert.isOk(builtParameter.resolved)
+          assert.isTrue(builtParameter.resolved)
         })
 
         it('must resolve the parameter when the function is waiting for the parameter', async function () {
@@ -100,7 +100,7 @@ describe('AsyncTDD', () => {
             await parameter()
           }
           await asyncTest(functionToExecute)
-          assert.isOk(builtParameter.resolved)
+          assert.isTrue(builtParameter.resolved)
         })
       })
 
@@ -111,7 +111,7 @@ describe('AsyncTDD', () => {
           const functionToExecute = function (parameter) {
             execution++
             if (execution === 2) {
-              assert.isOk(parameter.resolved)
+              assert.isTrue(parameter.resolved)
             }
           }
           await asyncTest(functionToExecute)
@@ -136,8 +136,8 @@ describe('AsyncTDD', () => {
 
       it('must create an asyncFunction for all the parameters', async function () {
         const functionToExecute = function (parameter, secondParameter) {
-          assert.isOk(parameter.resolve)
-          assert.isOk(secondParameter.resolve)
+          assert.isDefined(parameter.resolve)
+          assert.isDefined(secondParameter.resolve)
         }
         await asyncTest(functionToExecute)
       })
@@ -156,8 +156,8 @@ describe('AsyncTDD', () => {
           const functionToExecute = function (parameter, secondParameter) {
             execution++
             if (execution === 1) {
-              assert.isNotOk(parameter.resolved)
-              assert.isNotOk(secondParameter.resolved)
+              assert.isFalse(parameter.resolved)
+              assert.isFalse(secondParameter.resolved)
             }
 
             builtParameter = parameter
@@ -165,16 +165,16 @@ describe('AsyncTDD', () => {
           }
 
           await asyncTest(functionToExecute)
-          assert.isOk(builtParameter.resolved)
-          assert.isOk(builtSecondParameter.resolved)
+          assert.isTrue(builtParameter.resolved)
+          assert.isTrue(builtSecondParameter.resolved)
         })
 
         it('must resolve the first parameter before the second parameter', async function () {
           const functionToExecute = function (parameter, secondParameter) {
             execution++
             if (execution === 1) {
-              assert.isNotOk(parameter.resolved)
-              assert.isNotOk(secondParameter.resolved)
+              assert.isFalse(parameter.resolved)
+              assert.isFalse(secondParameter.resolved)
               functionToExecuteSpy()
               firstParameterResolveSpy = sinon.spy(parameter, 'resolve')
               secondParameterResolveSpy = sinon.spy(secondParameter, 'resolve')
@@ -182,8 +182,8 @@ describe('AsyncTDD', () => {
           }
 
           await asyncTest(functionToExecute)
-          assert.isOk(functionToExecuteSpy.calledBefore(firstParameterResolveSpy))
-          assert.isOk(firstParameterResolveSpy.calledBefore(secondParameterResolveSpy))
+          assert.isTrue(functionToExecuteSpy.calledBefore(firstParameterResolveSpy))
+          assert.isTrue(firstParameterResolveSpy.calledBefore(secondParameterResolveSpy))
         })
       })
 
@@ -192,8 +192,8 @@ describe('AsyncTDD', () => {
           const functionToExecute = function (parameter, secondParameter) {
             execution++
             if (execution === 2) {
-              assert.isNotOk(parameter.resolved)
-              assert.isNotOk(secondParameter.resolved)
+              assert.isFalse(parameter.resolved)
+              assert.isFalse(secondParameter.resolved)
               functionToExecuteSpy()
               firstParameterResolveSpy = sinon.spy(parameter, 'resolve')
               secondParameterResolveSpy = sinon.spy(secondParameter, 'resolve')
@@ -201,8 +201,8 @@ describe('AsyncTDD', () => {
           }
 
           await asyncTest(functionToExecute)
-          assert.isOk(functionToExecuteSpy.calledBefore(secondParameterResolveSpy))
-          assert.isOk(secondParameterResolveSpy.calledBefore(firstParameterResolveSpy))
+          assert.isTrue(functionToExecuteSpy.calledBefore(secondParameterResolveSpy))
+          assert.isTrue(secondParameterResolveSpy.calledBefore(firstParameterResolveSpy))
         })
       })
 
@@ -211,8 +211,8 @@ describe('AsyncTDD', () => {
           const functionToExecute = function (parameter, secondParameter) {
             execution++
             if (execution === 3) {
-              assert.isOk(parameter.resolved)
-              assert.isNotOk(secondParameter.resolved)
+              assert.isTrue(parameter.resolved)
+              assert.isFalse(secondParameter.resolved)
               functionToExecuteSpy()
               firstParameterResolveSpy = sinon.spy(parameter, 'resolve')
               secondParameterResolveSpy = sinon.spy(secondParameter, 'resolve')
@@ -220,7 +220,7 @@ describe('AsyncTDD', () => {
           }
 
           await asyncTest(functionToExecute)
-          assert.isOk(functionToExecuteSpy.calledBefore(secondParameterResolveSpy))
+          assert.isTrue(functionToExecuteSpy.calledBefore(secondParameterResolveSpy))
         })
       })
 
@@ -229,8 +229,8 @@ describe('AsyncTDD', () => {
           const functionToExecute = function (parameter, secondParameter) {
             execution++
             if (execution === 4) {
-              assert.isOk(parameter.resolved)
-              assert.isOk(secondParameter.resolved)
+              assert.isTrue(parameter.resolved)
+              assert.isTrue(secondParameter.resolved)
               functionToExecuteSpy()
               firstParameterResolveSpy = sinon.spy(parameter, 'resolve')
               secondParameterResolveSpy = sinon.spy(secondParameter, 'resolve')
@@ -246,15 +246,15 @@ describe('AsyncTDD', () => {
           const functionToExecute = function (parameter, secondParameter) {
             execution++
             if (execution === 5) {
-              assert.isNotOk(parameter.resolved)
-              assert.isOk(secondParameter.resolved)
+              assert.isFalse(parameter.resolved)
+              assert.isTrue(secondParameter.resolved)
               functionToExecuteSpy()
               firstParameterResolveSpy = sinon.spy(parameter, 'resolve')
               secondParameterResolveSpy = sinon.spy(secondParameter, 'resolve')
             }
           }
           await asyncTest(functionToExecute)
-          assert.isOk(functionToExecuteSpy.calledBefore(secondParameterResolveSpy))
+          assert.isTrue(functionToExecuteSpy.calledBefore(secondParameterResolveSpy))
         })
       })
 
@@ -263,8 +263,8 @@ describe('AsyncTDD', () => {
           const functionToExecute = function (parameter, secondParameter) {
             execution++
             if (execution === 6) {
-              assert.isOk(parameter.resolved)
-              assert.isOk(secondParameter.resolved)
+              assert.isTrue(parameter.resolved)
+              assert.isTrue(secondParameter.resolved)
             }
           }
           await asyncTest(functionToExecute)

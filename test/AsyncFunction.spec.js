@@ -12,11 +12,11 @@ describe('AsyncFunction', function(){
   describe('called property', ()=>{
     it('must be true when the function is called', ()=>{
       asyncFunction();
-      assert.isOk(asyncFunction.called)
+      assert.isTrue(asyncFunction.called)
     })
 
     it('must be false when the function is not called', ()=>{
-      assert.isNotOk(asyncFunction.called)
+      assert.isFalse(asyncFunction.called)
     })
   })
 
@@ -24,12 +24,12 @@ describe('AsyncFunction', function(){
     it('must be true when the function ends its asynchronous execution', ()=>{
       asyncFunction.resolve()
       asyncFunction()
-      assert.isOk(asyncFunction.executed)
+      assert.isTrue(asyncFunction.executed)
     })
 
     it('must be true when the function ends its asynchronous execution resolved after calling', (done)=>{
       asyncFunction().then(function(){
-        assert.isOk(asyncFunction.executed)
+        assert.isTrue(asyncFunction.executed)
         done()
       })
       asyncFunction.resolve()
@@ -37,19 +37,19 @@ describe('AsyncFunction', function(){
 
     it('must be false when the function does not end its execution', ()=>{
       asyncFunction()
-      assert.isNotOk(asyncFunction.executed)
+      assert.isFalse(asyncFunction.executed)
     })
   })
 
   describe('resolved property', ()=>{
     it('must be true when the function is resolved without calling it', ()=>{
       asyncFunction.resolve()
-      assert.isOk(asyncFunction.resolved)
+      assert.isTrue(asyncFunction.resolved)
     })
 
     it('must be false when the function is not resolved', ()=>{
       asyncFunction()
-      assert.isNotOk(asyncFunction.resolved)
+      assert.isFalse(asyncFunction.resolved)
     })
   })
 
@@ -66,7 +66,7 @@ describe('AsyncFunction', function(){
       })
 
       setTimeout(function(){
-        assert.isNotOk(executed)
+        assert.isFalse(executed)
         done()
       }, 1)
     })

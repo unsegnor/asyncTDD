@@ -16,6 +16,9 @@ function AsyncTDD () {
       asyncFunction.executed = true
     }
 
+    asyncFunction.called = false
+    asyncFunction.executed = false
+    
     return asyncFunction
   }
 

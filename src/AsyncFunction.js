@@ -27,6 +27,10 @@ function AsyncFunction() {
     asyncFunction.resolveValue = value
   }
 
+  asyncFunction.called = false
+  asyncFunction.executed = false
+  asyncFunction.resolved = false
+
   return asyncFunction
 }
 
