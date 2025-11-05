@@ -24,7 +24,7 @@
   "homepage": "https://github.com/unsegnor/asyncTDD#readme",
   "devDependencies": {
     "chai": "6.2.0",
-    "mocha": "11.7.4",
+    "mocha": "11.7.5",
     "sinon": "21.0.0"
   },
   "dependencies": {
